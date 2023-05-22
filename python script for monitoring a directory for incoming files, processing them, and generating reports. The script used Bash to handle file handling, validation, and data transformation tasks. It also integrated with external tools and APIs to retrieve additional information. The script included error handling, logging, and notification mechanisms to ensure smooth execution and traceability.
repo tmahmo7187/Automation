@@ -1,0 +1,48 @@
+import os
+import subprocess
+import logging
+
+# Configure logging
+logging.basicConfig(filename='monitoring.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def process_file(file_path):
+    try:
+        # Validate file
+        if not os.path.isfile(file_path):
+            logging.error(f"Invalid file: {file_path}")
+            return
+
+        # Perform data processing tasks
+        # Example: data transformation, validation, integration with external tools/APIs
+        # subprocess.call() can be used to execute Bash commands
+
+        # Generate report
+        report_path = file_path + '.report'
+        with open(report_path, 'w') as report_file:
+            report_file.write("This is the generated report.")
+
+        logging.info(f"Processed file: {file_path}. Generated report: {report_path}")
+
+    except Exception as e:
+        logging.exception(f"Error processing file: {file_path}. {str(e)}")
+
+def monitor_directory(directory):
+    try:
+        while True:
+            for filename in os.listdir(directory):
+                file_path = os.path.join(directory, filename)
+                if os.path.isfile(file_path):
+                    process_file(file_path)
+
+            # Add delay between directory scans
+            # Adjust the sleep duration based on your requirements
+            time.sleep(5)
+
+    except Exception as e:
+        logging.exception(f"Error monitoring directory: {directory}. {str(e)}")
+
+# Directory to monitor
+directory_to_monitor = '/path/to/directory'
+
+# Start monitoring the directory
+monitor_directory(directory_to_monitor)
