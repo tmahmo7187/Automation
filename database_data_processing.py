@@ -1,7 +1,7 @@
 import mysql.connector
 import subprocess
 
-# MySQL connection configuration
+#  MySQL connection configuration
 mysql_config = {
     'host': 'hostname',        # Replace with the hostname of your MySQL server
     'user': 'username',        # Replace with your MySQL username
