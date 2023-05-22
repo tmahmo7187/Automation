@@ -1,6 +1,7 @@
 import os
 import subprocess
 import logging
+#import all necessary 
 
 # Configure logging
 logging.basicConfig(filename='monitoring.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
