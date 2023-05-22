@@ -38,7 +38,7 @@ time.sleep(2)  # Add a small delay for search results to populate
 group_element = driver.find_element_by_xpath(f"//span[@title='{group_name}']")
 group_element.click()
 
-# Wait for the chat to load
+# Wait for the chat to load,.until() is a method provided by the WebDriverWait class in Selenium. It is used to wait for a specific condition to be met before proceeding with the script execution.
 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-tab='6']")))
 
 # Get the current day and time
