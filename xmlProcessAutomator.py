@@ -1,3 +1,4 @@
+import pandas as pd
 import xml.etree.ElementTree as ET
 from lxml import etree
 
@@ -16,8 +17,27 @@ xml_data = '''
     </person>
 </root>
 '''
+# Read the Excel file into a pandas DataFrame
+df = pd.read_excel('input.xlsx')
 
-# Parsing XML using ElementTree
+# Create the root element for the XML
+root = ET.Element('data')
+
+# Iterate over the rows of the DataFrame
+for _, row in df.iterrows():
+    # Create a child element for each row
+    item = ET.SubElement(root, 'item')
+
+    # Iterate over the columns of the row
+    for col_name, col_value in row.items():
+        # Create a sub-element for each column
+        sub_element = ET.SubElement(item, col_name)
+        sub_element.text = str(col_value)
+
+# Parsing XML data from file
+root_element = ET.parse('sample.xml')
+
+# Parsing XML data as string using ElementTree
 root_element = ET.fromstring(xml_data)
 
 # Access specific elements and their data using ElementTree
