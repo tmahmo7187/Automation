@@ -1,6 +1,9 @@
 import pandas as pd
+from bs4 import BeautifulSoup           #  API for extracting data from HTML or XML documents
+import xml.sax                          # event-driven parsing approach
+import xml.dom.minidom as minidom       # allows you to parse an XML document into a DOM tree, navigate the tree structure using methods like getElementsByTagName(), 
 import xml.etree.ElementTree as ET
-from lxml import etree
+from lxml import etree                  # easy-to-use interface for XML and HTML parsing
 
 # Example XML file
 xml_data = '''
@@ -17,42 +20,41 @@ xml_data = '''
     </person>
 </root>
 '''
-# Read the Excel file into a pandas DataFrame
-df = pd.read_excel('input.xlsx')
 
-# Create the root element for the XML
-root = ET.Element('data')
+# Reading in from file and establishing the root element.
+tree = ET.parse('country_data.xml')
+root = tree.getroot()
 
-# Iterate over the rows of the DataFrame
-for _, row in df.iterrows():
-    # Create a child element for each row
-    item = ET.SubElement(root, 'item')
+# Reading in from string:
+root = ET.fromstring(country_data_as_string)
 
-    # Iterate over the columns of the row
-    for col_name, col_value in row.items():
-        # Create a sub-element for each column
-        sub_element = ET.SubElement(item, col_name)
-        sub_element.text = str(col_value)
+# After having parsed your file, you can use the handle to write to file again:
+tree.write("{name}.xml".format(name=myname))
 
-# Parsing XML data from file
-root_element = ET.parse('sample.xml')
+# Getting data from the XML tree:
+#(Here, for “child” you can put in any “child” or “subchild” of the file)
 
-# Parsing XML data as string using ElementTree
-root_element = ET.fromstring(xml_data)
-
-# Access specific elements and their data using ElementTree
-for person_element in root_element.findall('person'):
-    name = person_element.find('name').text
-    age = person_element.find('age').text
-    city = person_element.find('city').text
-    print(f"Name: {name}, Age: {age}, City: {city}")
-
-# Parsing XML using lxml
-lxml_root = etree.fromstring(xml_data)
-
-# Access specific elements and their data using lxml
-for person_element in lxml_root.xpath('person'):
-    name = person_element.xpath('name/text()')[0]
-    age = person_element.xpath('age/text()')[0]
-    city = person_element.xpath('city/text()')[0]
-    print(f"Name: {name}, Age: {age}, City: {city}")
+for mychild in root.iter('child'):
+    print(mychild.attrib)
+    
+# Every child has attributes, that is called by child.attrib and a text that is it covering child.text, both of which can be called and changed.
+# Changing data:
+for child in root.iter('child'):
+    change_text = "fart{}".format(child.text) 
+    child.text = change_text
+    child.set('attribute', 'change')
+    
+ # Removing childs:
+for child in root.findall('child'):
+    rank = int(child.find('rank').text)
+    if rank > 50:
+        root.remove(child)
+        
+# Building XML:
+  # building elements
+a = ET.Element('a')
+b = ET.SubElement(a, 'b')
+c = ET.SubElement(a, 'c')
+d = ET.SubElement(c, 'd')
+  #showing tree
+ET.dump(a)       
